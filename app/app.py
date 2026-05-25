@@ -1,0 +1,85 @@
+import streamlit as st
+import pandas as pd
+import yfinance as yf
+import joblib
+
+from ta.momentum import RSIIndicator
+from ta.trend import MACD
+
+# Load model
+model = joblib.load("../models/random_forest.pkl")
+
+st.title("Crypto Price Prediction Dashboard")
+
+st.write("AI-powered Bitcoin trend prediction")
+
+# Download BTC data
+btc = yf.download(
+    "BTC-USD",
+    start="2024-01-01"
+)
+
+btc.columns = btc.columns.get_level_values(0)
+
+# Features
+btc["MA7"] = btc["Close"].rolling(7).mean()
+
+btc["MA30"] = btc["Close"].rolling(30).mean()
+
+btc["Daily_Return"] = btc["Close"].pct_change()
+
+btc["Volatility"] = (
+    btc["Daily_Return"]
+    .rolling(7)
+    .std()
+)
+
+# RSI
+rsi = RSIIndicator(close=btc["Close"])
+
+btc["RSI"] = rsi.rsi()
+
+# MACD
+macd = MACD(close=btc["Close"])
+
+btc["MACD"] = macd.macd()
+
+btc = btc.dropna()
+
+# Latest row
+latest = btc.iloc[-1]
+
+features = [[
+    latest["Open"],
+    latest["High"],
+    latest["Low"],
+    latest["Close"],
+    latest["Volume"],
+    latest["MA7"],
+    latest["MA30"],
+    latest["Daily_Return"],
+    latest["Volatility"],
+    latest["RSI"],
+    latest["MACD"]
+]]
+
+# Prediction
+prediction = model.predict(features)[0]
+
+# Display prediction
+st.subheader("AI Prediction")
+
+if prediction == 1:
+    st.success("Bitcoin price may go UP tomorrow ")
+else:
+    st.error("Bitcoin price may go DOWN tomorrow")
+
+# BTC chart
+st.subheader("Bitcoin Closing Price")
+
+st.line_chart(btc["Close"])
+
+# Show latest data
+st.subheader("Latest Market Data")
+
+st.dataframe(btc.tail())
