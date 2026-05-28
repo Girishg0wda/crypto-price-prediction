@@ -1,11 +1,20 @@
-import yfinance as yf
+import pandas as pd
+
 
 def load_data():
-    btc = yf.download(
-        "BTC-USD",
-        start = "2020-01-01",
-        end = "2025-01-01"
+
+    btc = pd.read_csv(
+        "../data/BTC-USD.csv",
+        sep=";"
     )
 
-    btc.columns = btc.columns.get_level_values(0)
+    btc["timestamp"] = pd.to_datetime(
+        btc["timestamp"]
+    )
+
+    btc.set_index(
+        "timestamp",
+        inplace=True
+    )
+
     return btc
