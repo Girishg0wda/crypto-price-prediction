@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import yfinance as yf
+# import yfinance as yf
 import joblib
 
 from ta.momentum import RSIIndicator
@@ -13,20 +13,25 @@ st.title("Crypto Price Prediction Dashboard")
 
 st.write("AI-powered Bitcoin trend prediction")
 
-# Download BTC data
-btc = yf.download(
-    "BTC-USD",
-    start="2024-01-01"
+btc = pd.read_csv(
+    "../data/BTC-USD.csv",
+    sep=";"
 )
+# print(btc.columns)
+btc["timestamp"] = pd.to_datetime(
+    btc["timestamp"]
+)
+
+btc.set_index("timestamp", inplace=True)
 
 btc.columns = btc.columns.get_level_values(0)
 
 # Features
-btc["MA7"] = btc["Close"].rolling(7).mean()
+btc["MA7"] = btc["close"].rolling(7).mean()
 
-btc["MA30"] = btc["Close"].rolling(30).mean()
+btc["MA30"] = btc["close"].rolling(30).mean()
 
-btc["Daily_Return"] = btc["Close"].pct_change()
+btc["Daily_Return"] = btc["close"].pct_change()
 
 btc["Volatility"] = (
     btc["Daily_Return"]
@@ -35,12 +40,12 @@ btc["Volatility"] = (
 )
 
 # RSI
-rsi = RSIIndicator(close=btc["Close"])
+rsi = RSIIndicator(close=btc["close"])
 
 btc["RSI"] = rsi.rsi()
 
 # MACD
-macd = MACD(close=btc["Close"])
+macd = MACD(close=btc["close"])
 
 btc["MACD"] = macd.macd()
 
@@ -50,11 +55,11 @@ btc = btc.dropna()
 latest = btc.iloc[-1]
 
 features = [[
-    latest["Open"],
-    latest["High"],
-    latest["Low"],
-    latest["Close"],
-    latest["Volume"],
+    latest["open"],
+    latest["high"],
+    latest["low"],
+    latest["close"],
+    latest["volume"],
     latest["MA7"],
     latest["MA30"],
     latest["Daily_Return"],
@@ -77,7 +82,7 @@ else:
 # BTC chart
 st.subheader("Bitcoin Closing Price")
 
-st.line_chart(btc["Close"])
+st.line_chart(btc["close"])
 
 # Show latest data
 st.subheader("Latest Market Data")
