@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import joblib
@@ -6,14 +7,28 @@ from ta.momentum import RSIIndicator
 from ta.trend import MACD
 
 # Load model
-model = joblib.load("../models/random_forest.pkl")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+model_path = os.path.join(
+    BASE_DIR,
+    "models",
+    "random_forest.pkl"
+)
+
+model = joblib.load(model_path)
 
 st.title("Crypto Price Prediction Dashboard")
 
 st.write("AI-powered Bitcoin trend prediction")
 
+csv_path = os.path.join(
+    BASE_DIR,
+    "data",
+    "BTC-USD.csv"
+)
+
 btc = pd.read_csv(
-    "../data/BTC-USD.csv",
+    csv_path,
     sep=";"
 )
 # print(btc.columns)
