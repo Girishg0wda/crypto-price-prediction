@@ -156,14 +156,13 @@ This project demonstrates practical experience in:
 * Cloud deployment
 * Real-world debugging and dependency management
 
-```
 👨‍💻 Author
 Girish Gowda
 GitHub:
 https://github.com/Girishg0wda
+
 LinkedIn:
 https://www.linkedin.com/in/girisha-s-r
-```
 
 ⭐ Support
 If you found this project useful, consider giving it a ⭐ on GitHub.
