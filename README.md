@@ -47,29 +47,24 @@ Version Control & Deployment
 * GitHub
 * Streamlit Cloud
 
-📂 Project Structure
-crypto-price-prediction/
-│
-├── app/
-│   └── app.py
-│
-├── data/
-│   └── BTC-USD.csv
-│
-├── models/
-│   └── random_forest.pkl
-│
-├── src/
-│   ├── data_loader.py
-│   ├── features.py
-│   ├── preprocess.py
-│   ├── evaluate.py
-│   └── train.py
-│
-├── screenshots/
-│
-├── requirements.txt
-├── README.md
+📂 Project Structure 
+crypto-price-prediction/ 
+│ 
+├── app/ 
+│ └── app.py │ 
+├── data/ 
+│ └── BTC-USD.csv 
+│ ├── models/ 
+│ └── random_forest.pkl 
+│ ├── src/ │ 
+├── data_loader.py 
+│ ├── features.py 
+│ ├── preprocess.py 
+│ ├── evaluate.py 
+│ └── train.py 
+│ ├── screenshots/ 
+│ ├── requirements.txt 
+├── README.md 
 └── .gitignore
 
 ⚙️ Installation
