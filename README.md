@@ -157,7 +157,9 @@ This project demonstrates practical experience in:
 * Real-world debugging and dependency management
 
 👨‍💻 Author
+
 Girish Gowda
+
 GitHub:
 https://github.com/Girishg0wda
 
